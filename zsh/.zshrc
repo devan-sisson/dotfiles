@@ -16,6 +16,7 @@ export EDITOR=$VISUAL
 
 # Loads envman env vars
 source ~/.config/envman/PATH.env
+source ~/arivo-alias.sh
 
 # Load vte for tilix
 # if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
@@ -28,7 +29,8 @@ source ~/.config/envman/PATH.env
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="othello"
+ZSH_THEME="robbyrussell"
+# ZSH_THEME="othello"
 
 plugins=(git)
 
@@ -40,18 +42,18 @@ function zshsrc()
   echo "refreshed zsh source"
 }
 
-function opencode() 
-{
-  if command -v code $> /dev/null
-    then
-      for i in "$@"
-      do
-        code "$i"
-      done
-    else
-      echo "vscode not installed"
-  fi
-}
+# function opencode() 
+# {
+#   if command -v code $> /dev/null
+#     then
+#       for i in "$@"
+#       do
+#         code "$i"
+#       done
+#     else
+#       echo "vscode not installed"
+#   fi
+# }
 
 #function kubsecrets()
 #{
@@ -63,6 +65,13 @@ alias zshless="less $HOME/.zshrc"
 
 alias nvimconfig="nvim ~/.config/nvim"
 
+if [[ "$(uname)" = "Darwin" ]]; then
+	alias ghosttyconfig="$EDITOR $HOME/Library/Application\ Support/com.mitchellh.ghostty/config"
+fi
+
+if [[ "$(uname)" = "Linux" ]]; then
+	alias ghosttyconfig="$EDITOR $HOME/.confing/ghostty/config"
+fi
 alias gotest='GO_TEST_OUTPUT=$(go test -json -v -count=1 ./...); \
   echo "$GO_TEST_OUTPUT" | gotestfmt -hide empty-packages; \
   echo "$GO_TEST_OUTPUT" | tparse;
@@ -106,7 +115,7 @@ export PATH=$PATH:$HOME/.cargo/bin
 export PATH="$PATH":"$HOME/.pub-cache/bin"
 export PATH=$PATH:$HOME/bin/exercism
 export PATH=$PATH:$HOME/bin
-export PATH=$PATH:$HOME/.local/share/mise/shims
+# export PATH=$PATH:$HOME/.local/share/mise/shims
 
 # export PATH=PATH:$HOME/bin/nvim-linux-x86_64/bin
 # setup go env vars to use company private dirs
@@ -118,4 +127,8 @@ export PATH=$PATH:$HOME/.local/share/mise/shims
 #
 
 
-eval "$(~/.local/bin/mise activate)"
+# eval "$(~/.local/bin/mise activate)"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
