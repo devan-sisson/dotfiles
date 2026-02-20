@@ -30,30 +30,70 @@ source ~/arivo-alias.sh
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="robbyrussell"
-# ZSH_THEME="othello"
+# ZSH_THEME="devansisson"
 
 plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 
-function zshsrc()
+# Set my default editor
+export VISUAL="nvim"
+# export VISUAL="vim"
+export EDITOR="$VISUAL"
+export SUDOEDITOR="$VISUAL"
+
+function cpdir()
 {
-  source $HOME/.zshrc
-  echo "refreshed zsh source"
+	cp -r $1 $2
 }
 
-# function opencode() 
-# {
-#   if command -v code $> /dev/null
-#     then
-#       for i in "$@"
-#       do
-#         code "$i"
-#       done
-#     else
-#       echo "vscode not installed"
-#   fi
-# }
+function zshsrc()
+{
+	echo "refreshing source"
+	source ~/.zshrc
+}
+
+function editconfig()
+{
+	mkdir -p "$(dirname "$1")" && \
+	${EDITOR:-nvim} $1
+}
+
+alias sshconfig="editconfig ~/.ssh/config"
+alias nvimconfig="editconfig ~/.config/nvim/init.vim"
+
+alias zshconfig="editconfig ~/.zshrc"
+alias dcomp="docker-compose"
+alias phpunit="$HOME/bin/phpunit"
+alias composer="$HOME/bin/composer.phar"
+
+if [[ "$(uname)" = "Darwin" ]]; then
+  export PATH=$PATH:"$HOME/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+  export ANDROID_HOME=$HOME/Library/Android/sdk
+  alias ghosttyconfig="editconfig $HOME/Library/Application\ Support/com.mitchellh.ghostty/config"  # add CHROME_EXECUTABLE for macOS: https://stackoverflow.com/a/69205440
+fi
+
+if [[ "$(uname)" = "Linux" ]]; then
+  alias ghosttyconfig="editconfig $HOME/.config/ghostty/config"
+  export ANDROID_HOME=$HOME/Android/Sdk
+  export CHROME_EXECUTABLE=/usr/bin/brave-browser
+fi
+
+
+
+export PATH=$PATH:"$HOME/.pub-cache/bin"
+export DOTNET_ROOT=$HOME/dotnet
+export ANDROID_HOME=$HOME/Library/Android/sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/tools/bin
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+export PATH=$PATH:$HOME/bin/flutter/bin
+export PATH=$PATH:$HOME/bin/phpunit
+export PATH=$PATH:$HOME/bin/composer
+export PATH=$PATH:$HOME/bin
+export PATH=$PATH:$DOTNET_ROOT
+
 
 #function kubsecrets()
 #{
@@ -82,25 +122,12 @@ alias dcomp="docker compose"
 alias gotestsum="go run gotest.tools/gotestsum@latest --format testname"
 # alias newproj="project-template-cli"
 
-
-
-
 # alias phpunit="$HOME/bin/phpunit"
 # alias composer="$HOME/bin/composer.phar"
 
 # export DOTNET_ROOT=$HOME/dotnet
 # export PATH=$PATH:$DOTNET_ROOT
 # export PATH=$PATH:"$HOME/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-if [[ "$(uname)" = "Darwin" ]]; then
- 	export ANDROID_HOME=$HOME/Library/Android/sdk
-  # add CHROME_EXECUTABLE for macOS: https://stackoverflow.com/a/69205440
-fi
-
-if [[ "$(uname)" = "Linux" ]]; then
-	export ANDROID_HOME=$HOME/Android/Sdk
-  export CHROME_EXECUTABLE=/usr/bin/brave-browser
-fi
-
 export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/tools
 export PATH=$PATH:$ANDROID_HOME/tools/bin
@@ -126,8 +153,10 @@ export PATH=$PATH:$HOME/bin
 #fi
 #
 
-
+# Generated for envman. Do not edit.
+[ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
 # eval "$(~/.local/bin/mise activate)"
+eval "$(zoxide init zsh)"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
